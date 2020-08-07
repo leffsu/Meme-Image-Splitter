@@ -33,7 +33,7 @@ python splitter.py -p '/Users/leff/original.png' -i lev -t vel
 python splitter.py -p '/Users/leff/original.png' -i lev -t vel -o h
 ```
 Original:
-![Original](../original.png)
+![Original](../master/original.png)
 
 Dependencies
 -------------
