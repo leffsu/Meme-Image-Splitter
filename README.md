@@ -16,12 +16,21 @@ Options:
                         initial name
   -t TARGET_NAME, --target_name=TARGET_NAME
                         target name
+  -o ORIENTATION, --orientation=ORIENTATION
+                        orientation
+```
+PATH, INITIAL_NAME, TARGET_NAME are mandatory.
 
+ORIENTATION is optional. By default it will cut vertically.
 
+```Bash
 python splitter.py -p pathToFile -i initialName -t targetName
+```
 
 For example:
+```Bash
 python splitter.py -p '/Users/leff/original.png' -i lev -t vel
+python splitter.py -p '/Users/leff/original.png' -i lev -t vel -o h
 ```
 
 Dependencies

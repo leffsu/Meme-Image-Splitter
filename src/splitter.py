@@ -4,22 +4,26 @@ import os
 from PIL import Image
 
 
-def main(file_input, initial_name, target_name):
+def main(file_input, initial_name, target_name, orientation):
     # First, we check names if we can actually glue them.
     check_for_names_correctness(initial_name, target_name)
     file, width, height = open_file(file_input)
     # Detect the amount of cuts.
     amount_of_cuts = len(initial_name)
+    cut_length = 0
     # Detect the cut height. Must be integer because division return float.
-    cut_height = int(height / amount_of_cuts)
+    if orientation is 'v':
+        cut_length = int(height / amount_of_cuts)
+    else:
+        cut_length = int(width / amount_of_cuts)
     # Path to folder to save temporary files.
     path_to_folder = os.path.dirname(file_input)
     # Get image paths for original image.
-    image_paths = cut_image(file, height, width, cut_height, path_to_folder)
+    image_paths = cut_image(file, height, width, cut_length, path_to_folder, orientation)
     # Get image paths in order, looking at target name.
     images_in_order = get_image_order(image_paths, initial_name, target_name)
     # Glue the images.
-    glue_images(images_in_order, path_to_folder)
+    glue_images(images_in_order, path_to_folder, orientation)
     # Delete all temporary files.
     clean_up(image_paths)
 
@@ -47,20 +51,31 @@ def open_file(file):
     return im, width, height
 
 
-def cut_image(image, height, width, cut_height, path):
+def cut_image(image, height, width, cut_height, path, orientation):
     # Array for image paths.
     images_paths = []
     # Counter.
     k = 0
-    for i in range(0, height, cut_height):
-        # Creating a box to crop with.
-        box = (0, i, width, i + cut_height)
-        a = image.crop(box)
-        # Saving file.
-        path = f'{path}'"IMG-%s.png" % k
-        a.save(os.path.join(path))
-        images_paths.append(path)
-        k += 1
+    if orientation is 'v':
+        for i in range(0, height, cut_height):
+            # Creating a box to crop with.
+            box = (0, i, width, i + cut_height)
+            a = image.crop(box)
+            # Saving file.
+            path = f'{path}'"IMG-%s.png" % k
+            a.save(os.path.join(path))
+            images_paths.append(path)
+            k += 1
+    else:
+        for i in range(0, width, cut_height):
+            # Creating a box to crop with.
+            box = (i, 0, i + cut_height, height)
+            a = image.crop(box)
+            # Saving file.
+            path = f'{path}'"IMG-%s.png" % k
+            a.save(os.path.join(path))
+            images_paths.append(path)
+            k += 1
     return images_paths
 
 
@@ -78,21 +93,23 @@ def get_image_order(image_paths, initial_name, target_name):
     return new_image_paths
 
 
-def glue_images(image_paths, path):
+def glue_images(image_paths, path, orientation):
     # Opening images.
     images = [Image.open(x) for x in image_paths]
     widths, heights = zip(*(i.size for i in images))
 
-    total_height = sum(heights)
-    max_width = max(widths)
-
-    new_im = Image.new('RGB', (max_width, total_height))
-
-    y_offset = 0
+    offset = 0
     # Glue the images.
-    for im in images:
-        new_im.paste(im, (0, y_offset))
-        y_offset += im.size[1]
+    if orientation is 'v':
+        new_im = Image.new('RGB', (max(widths), sum(heights)))
+        for im in images:
+            new_im.paste(im, (0, offset))
+            offset += im.size[1]
+    else:
+        new_im = Image.new('RGB', (sum(widths), max(heights)))
+        for im in images:
+            new_im.paste(im, (offset, 0))
+            offset += im.size[0]
 
     path = f'{path}/result.jpg'
 
@@ -121,6 +138,20 @@ parser.add_option('-t', '--target_name',
                   action="store", dest="target_name",
                   help="target name")
 
+parser.add_option('-o', '--orientation',
+                  action="store", dest="orientation",
+                  help="orientation")
+
 options, args = parser.parse_args()
 
-main(options.path, options.initial_name, options.target_name)
+parsed_path = options.path
+parsed_initial_name = options.initial_name
+parsed_target_name = options.target_name
+parsed_orientation = options.orientation
+
+if parsed_orientation is None:
+    parsed_orientation = 'v'
+elif parsed_orientation is not 'h' and parsed_orientation is not 'v':
+    raise Exception(f'Can\'t resolve the orientation. Please, pass only \'v\' for vertical or \'h\' for horizontal.')
+
+main(parsed_path, parsed_initial_name, parsed_target_name, parsed_orientation)
