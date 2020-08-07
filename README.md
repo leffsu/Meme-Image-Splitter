@@ -1,6 +1,8 @@
 Meme Image Splitter
 =====
 
+My little hour-long-development project
+
 How do I use Meme Image Splitter?
 -------------------
 
