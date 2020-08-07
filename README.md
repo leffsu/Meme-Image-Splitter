@@ -1,7 +1,7 @@
 Meme Image Splitter
 =====
 
-My little hour-long-development project
+My little half-an-hour-long-development project
 
 How do I use Meme Image Splitter?
 -------------------
