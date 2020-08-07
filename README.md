@@ -29,11 +29,14 @@ python splitter.py -p pathToFile -i initialName -t targetName
 
 For example:
 ```Bash
-python splitter.py -p '/Users/leff/original.png' -i lev -t vel
-python splitter.py -p '/Users/leff/original.png' -i lev -t vel -o h
+python splitter.py -p '/Users/leff/original.png' -i lev -t lv -o v
 ```
 Original:
 ![Original](../master/original.png)
+
+Result:
+![Result](../master/result.jpg)
+
 
 Dependencies
 -------------
