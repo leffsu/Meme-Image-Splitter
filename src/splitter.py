@@ -80,7 +80,7 @@ def cut_image(image, height, width, cut_height, path, orientation):
 
 
 def get_image_order(image_paths, initial_name, target_name):
-    # Initial = lev, target = vel. Therefore, indexes will be [2,1,0], image paths will follow.
+    # Initial = lev, target = vel. Therefore, indexes will be [2,1,0], image paths will follow. 
     new_image_paths = []
     indexes = []
 
