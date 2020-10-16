@@ -5,13 +5,13 @@ from PIL import Image
 
 
 def main(file_input, initial_name, target_name, orientation):
-    # First, we check names if we can actually glue them.
+    # First, we check names if we can actually glue them. 
     check_for_names_correctness(initial_name, target_name)
     file, width, height = open_file(file_input)
     # Detect the amount of cuts.
     amount_of_cuts = len(initial_name)
     cut_length = 0
-    # Detect the cut height. Must be integer because division return float.
+    # Detect the cut height. Must be integer because division return float. 
     if orientation is 'v':
         cut_length = int(height / amount_of_cuts)
     else:
