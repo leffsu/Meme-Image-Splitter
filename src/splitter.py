@@ -33,7 +33,7 @@ def check_for_names_correctness(initial_name, target_name):
     can_glue = True
     symbol_reason = ''
 
-    # Check if all symbols in target name can be found in initial name.
+    # Check if all symbols in target name can be found in initial name. 
     for x in target_name:
         if x not in initial_name and can_glue:
             can_glue = False
